@@ -15,6 +15,7 @@ on:
 env:
   DOCKERHUB_USERNAME: titilambert
   CUDA_BASE_IMAGE: nvidia/cuda:11.7.1-cudnn8-devel
+  DOCKER_IMAGE_NAME: cuda-actions-runner
 
 jobs:
   build-runners:
@@ -32,9 +33,13 @@ jobs:
           runner_version=$(grep -R "RUNNER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
           docker_version=$(grep -R "DOCKER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
           runner_container_hooks_version=$(grep -R "RUNNER_CONTAINER_HOOKS_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
+          os_name=$(grep -R "os-name:" actions-runner-controller/.github/workflows/runners.yaml | head -1 | tr -d " " | cut -d ":" -f 2)
+          os_version=$(grep -R "os-version:" actions-runner-controller/.github/workflows/runners.yaml | head -1 | tr -d " " | cut -d ":" -f 2)
           echo "RUNNER_VERSION=$runner_version" >> $GITHUB_ENV
           echo "DOCKER_VERSION=$docker_version" >> $GITHUB_ENV
           echo "RUNNER_CONTAINER_HOOKS_VERSION=$runner_container_hooks_version" >> $GITHUB_ENV
+          echo "OS_NAME=$os_name" >> $GITHUB_ENV
+          echo "OS_VERSION=$os_version" >> $GITHUB_ENV
       - name: Patch Dockerfile
         run: |
           sed -i "s@FROM \(ubuntu:[0-9]\{2\}\.[0-9]\{2\}\)@FROM ${CUDA_BASE_IMAGE}-\1@" actions-runner-controller/runner/actions-runner.dockerfile
@@ -59,3 +64,11 @@ jobs:
           build-args: |
             RUNNER_VERSION=${{ env.RUNNER_VERSION }}
             DOCKER_VERSION=${{ env.DOCKER_VERSION }}
+            RUNNER_CONTAINER_HOOKS_VERSION=${{ env.RUNNER_CONTAINER_HOOKS_VERSION }}
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}
+            ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}-${{ steps.vars.outputs.sha_short }}
+            ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+          cache-from: type=gha,scope=build-${{ env.DOCKER_IMAGE_NAME }}
+          cache-to: type=gha,mode=max,scope=build-${{ env.DOCKER_IMAGE_NAME }}
+"actions-runner-controller/.github/workflows/runners.yaml" 86 lines --100%--
