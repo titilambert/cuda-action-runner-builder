@@ -27,8 +27,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Get env vars from upstream action-runner-controller
         run: |
-          runner_version=$(grep -R "RUNNER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f)
-          docker_version=$(grep -R "DOCKER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f)
+          runner_version=$(grep -R "RUNNER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
+          docker_version=$(grep -R "DOCKER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
           runner_container_hooks_version=$(grep -R "RUNNER_CONTAINER_HOOKS_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f)
           echo "RUNNER_VRSION=$runner_version" >> $GITHUB_ENV
           echo "DOCKER_VERSION=$docker_version" >> $GITHUB_ENV
