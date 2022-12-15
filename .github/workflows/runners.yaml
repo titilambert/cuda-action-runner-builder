@@ -6,11 +6,11 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - 'actions-runner-controller/runner/**'
-      - '!actions-runner-controller/runner/Makefile'
-      - 'actions-runner-controller/.github/workflows/runners.yaml'
-      - '!**.md'
+#    paths:
+#      - 'actions-runner-controller/runner/**'
+#      - '!actions-runner-controller/runner/Makefile'
+#      - 'actions-runner-controller/.github/workflows/runners.yaml'
+#      - '!**.md'
 
 env:
   DOCKERHUB_USERNAME: titilambert
