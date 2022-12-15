@@ -1,0 +1,3 @@
+[submodule "actions-runner-controller"]
+	path = actions-runner-controller
+	url = https://github.com/actions/actions-runner-controller.git
