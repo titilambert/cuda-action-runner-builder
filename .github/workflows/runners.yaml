@@ -32,7 +32,7 @@ jobs:
           runner_version=$(grep -R "RUNNER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
           docker_version=$(grep -R "DOCKER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
           runner_container_hooks_version=$(grep -R "RUNNER_CONTAINER_HOOKS_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
-          echo "RUNNER_VRSION=$runner_version" >> $GITHUB_ENV
+          echo "RUNNER_VERSION=$runner_version" >> $GITHUB_ENV
           echo "DOCKER_VERSION=$docker_version" >> $GITHUB_ENV
           echo "RUNNER_CONTAINER_HOOKS_VERSION=$runner_container_hooks_version" >> $GITHUB_ENV
       - name: Patch Dockerfile
