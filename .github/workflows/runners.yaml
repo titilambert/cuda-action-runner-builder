@@ -71,4 +71,3 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
           cache-from: type=gha,scope=build-${{ env.DOCKER_IMAGE_NAME }}
           cache-to: type=gha,mode=max,scope=build-${{ env.DOCKER_IMAGE_NAME }}
-"actions-runner-controller/.github/workflows/runners.yaml" 86 lines --100%--
