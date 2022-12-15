@@ -1,3 +1,17 @@
+name: Runners
+
+on:
+  # We must do a trigger on a push: instead of a types: closed so GitHub Secrets
+  # are available to the workflow run
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'actions-runner-controller/runner/**'
+      - '!actions-runner-controller/runner/Makefile'
+      - 'actions-runner-controller/.github/workflows/runners.yaml'
+      - '!**.md'
+
 env:
   DOCKERHUB_USERNAME: titilambert
   CUDA_BASE_IMAGE: nvidia/cuda:11.7.1-cudnn8-devel
