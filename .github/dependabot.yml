@@ -4,6 +4,7 @@ version: 2
 updates:
   - package-ecosystem: "gitsubmodule" # See documentation for possible values
     directory: "/" # Location of package manifests
-    pull-request-branch-name.separator: "-"
+    pull-request-branch-name:
+      separator: "-"
     schedule:
       interval: "weekly"
