@@ -8,7 +8,7 @@ on:
       - 'main'
 
 env:
-  DOCKERHUB_USERNAME: titilambert
+  DOCKERHUB_USERNAME: voltrondatabot
   CUDA_BASE_IMAGE: nvidia/cuda:11.4.2-devel-ubuntu
   DOCKER_IMAGE_NAME: cuda-actions-runner
 
