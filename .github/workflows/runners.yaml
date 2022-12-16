@@ -6,15 +6,10 @@ on:
   push:
     branches:
       - 'main'
-#    paths:
-#      - 'actions-runner-controller/runner/**'
-#      - '!actions-runner-controller/runner/Makefile'
-#      - 'actions-runner-controller/.github/workflows/runners.yaml'
-#      - '!**.md'
 
 env:
   DOCKERHUB_USERNAME: titilambert
-  CUDA_BASE_IMAGE: nvidia/cuda:11.7.1-cudnn8-devel-ubuntu
+  CUDA_BASE_IMAGE: nvidia/cuda:11.4.2-devel-ubuntu
   DOCKER_IMAGE_NAME: cuda-actions-runner
 
 jobs:
@@ -42,8 +37,8 @@ jobs:
           echo "OS_VERSION=$os_version" >> $GITHUB_ENV
       - name: Patch Dockerfile
         run: |
-          sed -i "s@FROM ubuntu:\([0-9]\{2\}\.[0-9]\{2\}\)@FROM ${CUDA_BASE_IMAGE}\1@" actions-runner-controller/runner/actions-runner.dockerfile
-          cat actions-runner-controller/runner/actions-runner.dockerfile
+          sed -i "s@FROM ubuntu:\([0-9]\{2\}\.[0-9]\{2\}\)@FROM ${CUDA_BASE_IMAGE}\1@" actions-runner-controller/runner/actions-runner-dind.dockerfile
+          cat actions-runner-controller/runner/actions-runner-dind.dockerfile
 
       - name: Setup Docker Environment
         id: vars
@@ -51,8 +46,6 @@ jobs:
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-            #ghcr_username: ${{ github.actor }}
-            #ghcr_password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push Versioned Tags
         uses: docker/build-push-action@v3
