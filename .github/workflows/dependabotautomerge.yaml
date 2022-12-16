@@ -1,7 +1,8 @@
 name: "Dependabot Automerge - Action"
 
 on:
-  pull_request:
+  pull_request_target:
+    branches: [ main ]
 
 permissions:
   pull-requests: write
