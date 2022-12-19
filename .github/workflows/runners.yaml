@@ -40,7 +40,7 @@ jobs:
       - name: Patch Dockerfile
         run: |
           sed -i "s@FROM ubuntu:\([0-9]\{2\}\.[0-9]\{2\}\)@FROM ${CUDA_BASE_IMAGE}\1@" actions-runner-controller/runner/actions-runner-dind.${OS_NAME}-${OS_VERSION}.dockerfile
-          cat actions-runner-controller/runner/actions-runner-dind.dockerfile
+          cat actions-runner-controller/runner/actions-runner-dind.${OS_NAME}-${OS_VERSION}.dockerfile
 
       - name: Setup Docker Environment
         id: vars
@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./actions-runner-controller/runner
-          file: ./actions-runner-controller/runner/actions-runner.dockerfile
+          file: ./actions-runner-controller/runner/actions-runner${{ env.OS_NAME }}-${{ env.OS_VERSION }}.dockerfile
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           build-args: |
