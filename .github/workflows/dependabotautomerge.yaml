@@ -23,10 +23,3 @@ jobs:
               repo: context.payload.repository.name,
               pull_number: context.payload.pull_request.number
             })
-          #script: |
-          #  github.rest.issues.createComment({
-          #    issue_number: context.payload.pull_request.number,
-          #    owner: context.payload.repository.owner.login,
-          #    repo: context.payload.repository.name,
-          #    body: '@dependabot merge (automerge)'
-          #  })
