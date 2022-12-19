@@ -31,7 +31,7 @@ jobs:
           #os_name=$(grep -R "os-name:" actions-runner-controller/.github/workflows/runners.yaml | head -1 | tr -d " " | cut -d ":" -f 2)
           #os_version=$(grep -R "os-version:" actions-runner-controller/.github/workflows/runners.yaml | head -1 | tr -d " " | cut -d ":" -f 2)
           os_name=ubuntu
-          os_Version=20.04
+          os_version=20.04
           echo "RUNNER_VERSION=$runner_version" >> $GITHUB_ENV
           echo "DOCKER_VERSION=$docker_version" >> $GITHUB_ENV
           echo "RUNNER_CONTAINER_HOOKS_VERSION=$runner_container_hooks_version" >> $GITHUB_ENV
