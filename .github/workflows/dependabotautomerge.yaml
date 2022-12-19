@@ -17,7 +17,6 @@ jobs:
       - name: automerge
         uses: actions/github-script@v6
         with:
-          #github-token: ${{ secrets.VOLTRONDATABOT_GITHUB_TOKEN }}
           script: |
             github.rest.pulls.merge({
               owner: context.payload.repository.owner.login,
