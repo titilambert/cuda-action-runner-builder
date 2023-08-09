@@ -6,9 +6,11 @@ on:
   push:
     branches:
       - 'main'
+  workflow_dispatch:
 
 env:
   DOCKERHUB_USERNAME: voltrondatabot
+  DOCKERHUB_ORGANIZATION: voltrondata
   CUDA_BASE_IMAGE: nvidia/cuda:11.4.2-devel-ubuntu
   DOCKER_IMAGE_NAME: cuda-actions-runner
 
@@ -67,8 +69,7 @@ jobs:
             DOCKER_VERSION=${{ env.DOCKER_VERSION }}
             RUNNER_CONTAINER_HOOKS_VERSION=${{ env.RUNNER_CONTAINER_HOOKS_VERSION }}
           tags: |
-            ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}
-            ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}-${{ env.sha_short }}
-            ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+            ${{ env.DOCKERHUB_ORGANIZATION }}/${{ env.DOCKER_IMAGE_NAME }}:dind-v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}
+            ${{ env.DOCKERHUB_ORGANIZATION }}/${{ env.DOCKER_IMAGE_NAME }}:dind-v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}-${{ env.sha_short }}
           cache-from: type=gha,scope=build-${{ env.DOCKER_IMAGE_NAME }}
           cache-to: type=gha,mode=max,scope=build-${{ env.DOCKER_IMAGE_NAME }}
