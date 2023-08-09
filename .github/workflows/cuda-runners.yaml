@@ -13,6 +13,7 @@ env:
   DOCKERHUB_ORGANIZATION: voltrondata
   CUDA_BASE_IMAGE: nvidia/cuda:11.4.3-devel-ubuntu
   DOCKER_IMAGE_NAME: cuda-actions-runner
+  TARGETPLATFORM: linux/amd64
 
 jobs:
   build-runners:
@@ -68,6 +69,7 @@ jobs:
             RUNNER_VERSION=${{ env.RUNNER_VERSION }}
             DOCKER_VERSION=${{ env.DOCKER_VERSION }}
             RUNNER_CONTAINER_HOOKS_VERSION=${{ env.RUNNER_CONTAINER_HOOKS_VERSION }}
+            TARGETPLATFORM=${{ env.TARGETPLATFORM }}
           tags: |
             ${{ env.DOCKERHUB_ORGANIZATION }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}
             ${{ env.DOCKERHUB_ORGANIZATION }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}-${{ env.sha_short }}
