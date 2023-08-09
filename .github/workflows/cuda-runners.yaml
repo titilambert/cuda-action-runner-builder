@@ -11,7 +11,7 @@ on:
 env:
   DOCKERHUB_USERNAME: voltrondatabot
   DOCKERHUB_ORGANIZATION: voltrondata
-  CUDA_BASE_IMAGE: nvidia/cuda:11.4.2-devel-ubuntu
+  CUDA_BASE_IMAGE: nvidia/cuda:11.4.3-devel-ubuntu
   DOCKER_IMAGE_NAME: cuda-actions-runner
 
 jobs:
