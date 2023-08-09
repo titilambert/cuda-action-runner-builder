@@ -1,4 +1,4 @@
-name: Runners
+name: Cuda runner image
 
 on:
   # We must do a trigger on a push: instead of a types: closed so GitHub Secrets
