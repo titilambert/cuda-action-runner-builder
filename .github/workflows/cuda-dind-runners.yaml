@@ -60,7 +60,7 @@ jobs:
           context: ./actions-runner-controller/runner
           file: ./actions-runner-controller/runner/actions-runner-dind.${{ env.OS_NAME }}-${{ env.OS_VERSION }}.dockerfile
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          push: ${{ github.ref == 'refs/heads/main' }}
           build-args: |
             RUNNER_VERSION=${{ env.RUNNER_VERSION }}
             DOCKER_VERSION=${{ env.DOCKER_VERSION }}
