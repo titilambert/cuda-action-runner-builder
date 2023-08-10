@@ -1,4 +1,4 @@
-name: Runners
+name: Cuda runner image
 
 on:
   # We must do a trigger on a push: instead of a types: closed so GitHub Secrets
@@ -11,8 +11,11 @@ on:
 env:
   DOCKERHUB_USERNAME: voltrondatabot
   DOCKERHUB_ORGANIZATION: voltrondata
-  CUDA_BASE_IMAGE: nvidia/cuda:11.4.2-devel-ubuntu
+  CUDA_BASE_IMAGE: nvidia/cuda:11.4.3-devel-ubuntu
   DOCKER_IMAGE_NAME: cuda-actions-runner
+  TARGETPLATFORM: linux/amd64
+  OS_NAME: ubuntu
+  OS_VERSION: "20.04"
 
 jobs:
   build-runners:
@@ -27,18 +30,12 @@ jobs:
           submodules: recursive
       - name: Get env vars from upstream action-runner-controller
         run: |
-          runner_version=$(grep -R "RUNNER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
-          docker_version=$(grep -R "DOCKER_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
-          runner_container_hooks_version=$(grep -R "RUNNER_CONTAINER_HOOKS_VERSION:" actions-runner-controller/.github/workflows/runners.yaml | tr -d " " | cut -d ":" -f 2)
-          #os_name=$(grep -R "os-name:" actions-runner-controller/.github/workflows/runners.yaml | head -1 | tr -d " " | cut -d ":" -f 2)
-          #os_version=$(grep -R "os-version:" actions-runner-controller/.github/workflows/runners.yaml | head -1 | tr -d " " | cut -d ":" -f 2)
-          os_name=ubuntu
-          os_version=20.04
+          runner_version=$(grep -R "RUNNER_VERSION ?=" actions-runner-controller/runner/Makefile | tr -d " " | cut -d "=" -f 2)
+          docker_version=$(grep -R "DOCKER_VERSION ?=" actions-runner-controller/runner/Makefile | tr -d " " | cut -d "=" -f 2)
+          runner_container_hooks_version=$(grep -R "RUNNER_CONTAINER_HOOKS_VERSION ?=" actions-runner-controller/runner/Makefile | tr -d " "  | cut -d "=" -f 2)
           echo "RUNNER_VERSION=$runner_version" >> $GITHUB_ENV
           echo "DOCKER_VERSION=$docker_version" >> $GITHUB_ENV
           echo "RUNNER_CONTAINER_HOOKS_VERSION=$runner_container_hooks_version" >> $GITHUB_ENV
-          echo "OS_NAME=$os_name" >> $GITHUB_ENV
-          echo "OS_VERSION=$os_version" >> $GITHUB_ENV
       - name: Patch Dockerfile
         run: |
           sed -i "s@FROM ubuntu:\([0-9]\{2\}\.[0-9]\{2\}\)@FROM ${CUDA_BASE_IMAGE}\1@" actions-runner-controller/runner/actions-runner.${OS_NAME}-${OS_VERSION}.dockerfile
@@ -63,11 +60,12 @@ jobs:
           context: ./actions-runner-controller/runner
           file: ./actions-runner-controller/runner/actions-runner.${{ env.OS_NAME }}-${{ env.OS_VERSION }}.dockerfile
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          push: ${{ github.ref == 'refs/heads/main' }}
           build-args: |
             RUNNER_VERSION=${{ env.RUNNER_VERSION }}
             DOCKER_VERSION=${{ env.DOCKER_VERSION }}
             RUNNER_CONTAINER_HOOKS_VERSION=${{ env.RUNNER_CONTAINER_HOOKS_VERSION }}
+            TARGETPLATFORM=${{ env.TARGETPLATFORM }}
           tags: |
             ${{ env.DOCKERHUB_ORGANIZATION }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}
             ${{ env.DOCKERHUB_ORGANIZATION }}/${{ env.DOCKER_IMAGE_NAME }}:v${{ env.RUNNER_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_VERSION }}-${{ env.sha_short }}
